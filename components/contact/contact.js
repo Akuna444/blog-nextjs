@@ -1,23 +1,69 @@
+import { useRef } from "react";
 import classes from "./contact.module.css";
 
 function ContactForm() {
+  const emailInputRef = useRef();
+  const nameInputRef = useRef();
+  const messageInputRef = useRef();
+
+  const enteredEmail = emailInputRef.current.value;
+  const enteredName = nameInputRef.current.value;
+  const enteredMessage = messageInputRef.current.value;
+
+  function onSubmitHandler() {
+    fetch("/api/contact", {
+      method: "POST",
+      body: JSON.stringify({
+        email: enteredEmail,
+        name: enteredName,
+        message: enteredMessage,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Something Went Wrong");
+      })
+      .then((data) => console.log(data));
+  }
   return (
     <section className={classes.contact}>
       <h1>Contact Form</h1>
-      <form className={classes.form}>
+      <form onSubmit={onSubmitHandler} className={classes.form}>
         <div className={classes.controls}>
           <div className={classes.control}>
             <label htmlFor="email">Your Email</label>
-            <input id="email" type="email" placeholder="Your Email" required />
+            <input
+              ref={emailInputRef}
+              id="email"
+              type="email"
+              placeholder="Your Email"
+              required
+            />
           </div>
           <div className={classes.control}>
             <label htmlFor="name">Your Name</label>
-            <input id="name" type="text" placeholder="Your Name" required />
+            <input
+              ref={nameInputRef}
+              id="name"
+              type="text"
+              placeholder="Your Name"
+              required
+            />
           </div>
         </div>
         <div className={classes.control}>
           <label htmlFor="message">Your Message</label>
-          <textarea id="message" rows="5" placeholder="Your Message" />
+          <textarea
+            ref={messageInputRef}
+            id="message"
+            rows="5"
+            placeholder="Your Message"
+          />
         </div>
         <div className={classes.actions}>
           <button>Submit</button>
