@@ -6,11 +6,13 @@ function ContactForm() {
   const nameInputRef = useRef();
   const messageInputRef = useRef();
 
-  const enteredEmail = emailInputRef.current.value;
-  const enteredName = nameInputRef.current.value;
-  const enteredMessage = messageInputRef.current.value;
+  function onSubmitHandler(event) {
+    event.preventDefault();
 
-  function onSubmitHandler() {
+    const enteredEmail = emailInputRef.current.value;
+    const enteredName = nameInputRef.current.value;
+    const enteredMessage = messageInputRef.current.value;
+
     fetch("/api/contact", {
       method: "POST",
       body: JSON.stringify({
@@ -21,14 +23,7 @@ function ContactForm() {
       headers: {
         "Content-Type": "application/json",
       },
-    })
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Something Went Wrong");
-      })
-      .then((data) => console.log(data));
+    });
   }
   return (
     <section className={classes.contact}>

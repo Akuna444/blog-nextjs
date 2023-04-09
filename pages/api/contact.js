@@ -23,3 +23,5 @@ function handler(req, res) {
     console.log(newMessage);
   }
 }
+
+export default handler;
